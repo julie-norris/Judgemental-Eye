@@ -23,8 +23,8 @@ class User(db.Model):
         return "<User user_id=%s email=%s>" %(self.user_id, self.email)
         
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String(64), nullable=True)
-    password = db.Column(db.String(64), nullable=True)
+    email = db.Column(db.String(200), nullable=True)
+    password = db.Column(db.String(200), nullable=True)
     age = db.Column(db.Integer, nullable=True)
     zipcode = db.Column(db.String(15), nullable=True)
 
@@ -36,7 +36,7 @@ class Movie(db.Model):
     __tablename__ = "movies"
 
     movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    title = db.Column(db.String(64),nullable=False)
+    title = db.Column(db.String(200),nullable=False)
     released_at = db.Column(db.DateTime, nullable=True)
     imdb_url = db.Column(db.String(200), nullable=False)
 

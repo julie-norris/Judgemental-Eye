@@ -47,14 +47,23 @@ def load_movies():
         row = row.split("|")
         row = row[0:5]
         movie_id, title, released_at, video_release_date, imdb_url = row
+        split_title = title.split(" ")
+        trimmed_title = split_title[0:-1]
+        new_title = " "
+        title = new_title.join(trimmed_title)
 
-        print released_at
-    
-        movie = Movie(movie_id=movie_id, 
+        if released_at == '':
+            movie = Movie(movie_id=movie_id, 
                       title=title,
-                      released_at=datetime.strptime(released_at, 
-                                                    '%d-%m-%Y'),
+                      released_at = None,
                       imdb_url=imdb_url)
+
+        else:
+            movie = Movie(movie_id=movie_id, 
+                          title=title,
+                          released_at=datetime.strptime(released_at, 
+                                                        '%d-%b-%Y'),
+                          imdb_url=imdb_url)
 
         db.session.add(movie)
 
@@ -63,6 +72,23 @@ def load_movies():
 
 def load_ratings():
     """Load ratings from u.data into database."""
+
+    print "Ratings"
+
+    Rating.query.delete()
+
+    for row in open("seed_data/u.data"):
+        row = row.rstrip()
+        row = row.split("\t")
+        movie_id, user_id, score, discard = row
+
+        rating = Rating(movie_id=movie_id,
+                        user_id=user_id,
+                        score=score)
+
+        db.session.add(rating)
+
+    db.session.commit()
 
 
 def set_val_user_id():
