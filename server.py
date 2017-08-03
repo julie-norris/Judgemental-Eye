@@ -47,7 +47,7 @@ def register_process():
     password = request.form.get('password')
 
     user = User.query.filter_by(email=email).first()
-    print user
+    
     if not user:
         #create user in table
         user = User(email=email, password=password)
@@ -57,13 +57,35 @@ def register_process():
         session["email"] = user.email
         return redirect ("/")
     else:
-        return redirect("/")
+        return redirect("/log_in")
 
-@app.route("/log-in", methods=["GET"])
+@app.route("/log_in", methods=["GET"])
+def login_form():
+    """Logs in uder."""
+
+    return render_template("login_form.html")
 
 
+@app.route("/log_in", methods=["POST"])
+def login_process():
+    """ Processes the log in email and password if the user is new."""
 
-@app.route("/log-in". methods=["GET"])
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    user = User.query.filter_by(email=email).first()
+    
+    if user:
+        if password == user.password:
+            session["user_id"] = user.user_id
+            flash("You were successfully logged in")
+            return redirect("/")
+        else:
+            flash("Incorrect password")
+            return redirect("/log_in")
+    else:
+        return redirect("/register")
+
 
 
 
